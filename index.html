@@ -12,6 +12,7 @@ background:black;
 overflow:hidden;
 }
 
+/* VIDEO */
 video{
 position:fixed;
 top:0;
@@ -19,8 +20,11 @@ left:0;
 width:100vw;
 height:100vh;
 object-fit:cover;
+z-index:1;
+pointer-events:none;
 }
 
+/* TITLE */
 #title{
 position:absolute;
 top:25px;
@@ -31,7 +35,67 @@ font-size:18px;
 background:rgba(0,0,0,0.5);
 padding:6px 12px;
 border-radius:6px;
-z-index:10;
+z-index:9999;
+}
+
+/* LOGOS */
+#logo1{
+position:absolute;
+top:2%;
+left:2%;
+width:120px;
+z-index:9999;
+}
+
+#logo2{
+position:absolute;
+top:2%;
+right:2%;
+width:120px;
+z-index:9999;
+}
+
+#logo3{
+position:absolute;
+bottom:2%;
+left:50%;
+transform:translateX(-50%);
+width:120px;
+z-index:9999;
+}
+
+/* TEXT */
+#text1{
+position:absolute;
+top:10%;
+left:2%;
+color:white;
+z-index:9999;
+font-size:20px;
+}
+
+#text2{
+position:absolute;
+top:10%;
+right:2%;
+color:white;
+z-index:9999;
+font-size:20px;
+}
+
+#text3{
+position:absolute;
+bottom:8%;
+left:50%;
+transform:translateX(-50%);
+color:white;
+z-index:9999;
+font-size:22px;
+}
+
+/* SELECTED */
+.selected{
+outline:2px solid yellow;
 }
 
 </style>
@@ -42,138 +106,130 @@ z-index:10;
 
 <div id="title"></div>
 
-<video id="player"
-autoplay
-playsinline
-controls
-controlsList="nodownload"
-disablePictureInPicture
-></video>
+<!-- VIDEO -->
+<video id="player" autoplay playsinline controls></video>
+
+<!-- LOGOS -->
+<img src="https://via.placeholder.com/120x60?text=Logo1" id="logo1">
+<img src="https://via.placeholder.com/120x60?text=Logo2" id="logo2">
+<img src="https://via.placeholder.com/120x60?text=Logo3" id="logo3">
+
+<!-- TEXT -->
+<div id="text1">TEXT 1</div>
+<div id="text2">TEXT 2</div>
+<div id="text3">TEXT 3</div>
 
 <script>
 
+/* PLAYLIST */
 const playlist=[
-{"title":"Barkda Walang Atrasan","src":"https://videos.gia.tv/giatv/movies/playlist/211473/zoren_movie1_2.mp4"},
-{"title":"Youre My Boss","src":"https://videos.gia.tv/giatv/movies/playlist/211473/You___re_My_Boss.mp4"},
-{"src":"https://videos.gia.tv/giatv/movies/playlist/211473/qenerhiya__2___1_.mp4"},
-{"title":"Katawan","src":"https://videos.gia.tv/giatv/movies/playlist/211473/Katawan_FULL_MOVIE_HD.mp4"},
-{"title":"A Secret Affair","src":"https://videos.gia.tv/giatv/movies/playlist/211473/A_secret__affair__2019_full_movie_lovestory.mp4"},
-{"title":"Di Pwedeng Hindi Pwede","src":"https://ia801703.us.archive.org/27/items/di-puwedeng-hindi-puwede-full-movie-robin-padilla-vina-morales-abs-cbn-star-cinema-720p-h-264/%E2%80%98%27Di%20Puwedeng%20Hindi%20Puwede%21%27%20FULL%20MOVIE%20%20Robin%20Padilla%2C%20Vina%20Morales%20-%20ABS-CBN%20Star%20Cinema%20%28720p%2C%20h264%29.mp4"},{"src":"https://videos.gia.tv/giatv/movies/playlist/211473/rated_og_eng__no_watermarks.mp4"},{"title":"Akin Ang Labang Ito","src":"https://videos.gia.tv/giatv/movies/playlist/211473/AKIN_ANG_LABANG_ITO___Full_Movie___Action_w__Ace_Espinos.mp4"},{"title":"Jack Em Popoy","src":"https://dn721904.ca.archive.org/0/items/jack-em-popoy-the-puliscredibles-vic-sotto-coco-martin-comedy-tagalog-pinoy-full-movie-480p/JACK%20EM%20POPOY%20THE%20PULISCREDIBLES%20VIC%20SOTTO%20COCO%20MARTIN%20COMEDY%20TAGALOG%20PINOY%20FULL%20MOVIE%20%28480p%29.mp4"},
-{"title":"Paano Kita Iibigin","src":"https://dn710202.ca.archive.org/0/items/piolopascual/2007-Paano%20Kita%20Iibigin-%20Piolo%20Regine.mp4"},
-{"title":"Peter Pan & Wendy","src":"https://www.dropbox.com/s/mg94zxkcfjoedvq/D21.FUN-Peter-Pan-Wendy-2023-1682681957.mp4?dl=1"},
-{"title":"Love Me Again","src":"https://dn710202.ca.archive.org/0/items/piolopascual/2009-Love%20me%20again%20piolo%20angel.mp4"},
-{"title":"Bondying","src":"https://videos.gia.tv/giatv/movies/playlist/211473/YTDown_com_YouTube_Bondying_The_Little_Big_Boy_FULL_MOVIE_H_Media_TLu4UhY9aow_002_720p.mp4"},
-{"title":"Plane","src":"https://www.dropbox.com/s/bmvat7xcbxxvx4j/D21.FUN-Plane-2023-1675423071.mp4?dl=1"},
-{"title":"Every Breath U Take","src":"https://dn710202.ca.archive.org/0/items/piolopascual/2012-Every%20Breath%20U%20Take%20Piolo%20Angelica.mp4"},
-{"src":"https://videos.gia.tv/giatv/movies/playlist/211473/nescafe_jaycee_domincel.mp4"},
-{"src":"https://videos.gia.tv/giatv/movies/playlist/211473/qenerhiya__2___1_.mp4"},
-{"title":"Bad Boy","src":"https://videos.gia.tv/giatv/movies/playlist/211473/Bad_Boy_FULL_MOVIE_HD___Robin_Padilla.mp4"},
-{"title":"Love Me Tomorrow","src":"https://dn710202.ca.archive.org/0/items/piolopascual/2016-love%20me%20tomorrow-%20dawn%20piolo.mp4"},
-{"title":"Rob B Hood","src":"https://dn710206.ca.archive.org/0/items/youtube-cYulLxSBx8k/Rob.B.Hood.2006.480p.BDRip.XviD.DUAL-KiNGS.mp4"}]
+{"title":"Movie 1","src":"https://videos.gia.tv/giatv/movies/playlist/211473/zoren_movie1_2.mp4"},
+{"title":"Movie 2","src":"https://videos.gia.tv/giatv/movies/playlist/211473/You___re_My_Boss.mp4"}
+]
 
 const video=document.getElementById("player")
 const titleBox=document.getElementById("title")
 
-let index=parseInt(localStorage.getItem("movie_index"))||0
-let time=parseFloat(localStorage.getItem("movie_time"))||0
+let index=0
 
-let loadTimeout
-
-function play(i,start=0){
-
+function play(i){
 index=i
-
-clearTimeout(loadTimeout)
-
 video.src=playlist[i].src
 
-if(playlist[i].title){
+titleBox.innerText=playlist[i].title || ""
 
-titleBox.innerText=playlist[i].title
-titleBox.style.display="block"
-
-}else{
-
-titleBox.style.display="none"
-
-}
-
-video.onloadedmetadata=()=>{
-
-clearTimeout(loadTimeout)
-
-video.currentTime=start
-
-video.play().catch(()=>{})
-
-}
-
-video.onended=()=>{
-
-nextMovie()
-
-}
-
-/* AUTO SKIP IF ERROR */
-
-video.onerror=()=>{
-
-nextMovie()
-
-}
-
-/* AUTO SKIP IF STUCK LOADING */
-
-loadTimeout=setTimeout(()=>{
-
-if(video.readyState<2){
-
-nextMovie()
-
-}
-
-},8000)
-
+video.onended=()=>nextMovie()
 }
 
 function nextMovie(){
-
 let next=(index+1)%playlist.length
-
-play(next,0)
-
+play(next)
 }
 
-/* SAVE POSITION */
+play(index)
 
-setInterval(()=>{
+/* ========================= */
+/* SELECT + RESIZE SYSTEM 🔥 */
+/* ========================= */
 
-localStorage.setItem("movie_index",index)
-localStorage.setItem("movie_time",video.currentTime)
+let selected = null;
 
-},500)
+const items = document.querySelectorAll("#logo1,#logo2,#logo3,#text1,#text2,#text3");
 
-/* DOUBLE CLICK FULLSCREEN */
+items.forEach(el => {
 
-video.addEventListener("dblclick",()=>{
+/* LOAD SAVED SIZE */
+const saved = localStorage.getItem("size_"+el.id);
+if(saved){
+const data = JSON.parse(saved);
 
-if(!document.fullscreenElement){
+if(el.tagName==="IMG"){
+el.style.width = data.size + "px";
+}else{
+el.style.fontSize = data.size + "px";
+}
+}
 
-video.requestFullscreen()
+/* CLICK SELECT */
+el.addEventListener("click", () => {
+
+selected = el;
+
+document.querySelectorAll(".selected").forEach(e=>e.classList.remove("selected"));
+el.classList.add("selected");
+
+});
+
+});
+
+/* KEY CONTROLS */
+document.addEventListener("keydown",(e)=>{
+
+if(!selected) return;
+
+/* PALAKI */
+if(e.key==="+" || e.key==="="){
+
+if(selected.tagName==="IMG"){
+
+let w = selected.offsetWidth + 10;
+selected.style.width = w+"px";
+
+localStorage.setItem("size_"+selected.id, JSON.stringify({size:w}));
 
 }else{
 
-document.exitFullscreen()
+let s = parseInt(window.getComputedStyle(selected).fontSize) + 2;
+selected.style.fontSize = s+"px";
+
+localStorage.setItem("size_"+selected.id, JSON.stringify({size:s}));
+
+}
+
+}
+
+/* PALIIT */
+if(e.key==="-" ){
+
+if(selected.tagName==="IMG"){
+
+let w = selected.offsetWidth - 10;
+selected.style.width = w+"px";
+
+localStorage.setItem("size_"+selected.id, JSON.stringify({size:w}));
+
+}else{
+
+let s = parseInt(window.getComputedStyle(selected).fontSize) - 2;
+selected.style.fontSize = s+"px";
+
+localStorage.setItem("size_"+selected.id, JSON.stringify({size:s}));
+
+}
 
 }
 
 })
-
-/* BLOCK RIGHT CLICK */
-
-document.addEventListener("contextmenu",e=>e.preventDefault())
-
-play(index,time)
 
 </script>
 
